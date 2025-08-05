@@ -1,0 +1,21 @@
+name: ComGNN-env
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.11.13
+  - pandas
+  - tqdm
+  - numpy
+  - scikit-learn
+  - scipy
+  - cudatoolkit=11.7
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pip
+  - pip:
+    - torch-geometric
+    - wandb
