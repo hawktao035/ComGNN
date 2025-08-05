@@ -1,6 +1,6 @@
 # Pluvial Flood Emulation with Hydraulics-informed Message Passing  
 
-This the code our paper ["Pluvial Flood Emulation with Hydraulics-informed Message Passing"](https://openreview.net/forum?id=kIHIA6Lr0B&noteId=kIHIA6Lr0B) published at ICML 2024
+This is the Doss-Gollin lab fork of the original repository for the paper "Pluvial Flood Emulation with Hydraulics-informed Message Passing" by Kazadi, Doss-Gollin, and Silva. Please refer to and cite the [original paper] (https://openreview.net/forum?id=kIHIA6Lr0B&noteId=kIHIA6Lr0B) published at ICML 2024.
 
 ![Model framework](fig/framework3.png) 
 
