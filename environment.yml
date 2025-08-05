@@ -1,7 +1,7 @@
 name: ComGNN-env
 channels:
-  - pytorch
   - conda-forge
+  - pytorch
   - defaults
 
 dependencies:
