@@ -161,7 +161,7 @@ class ComputeDevQt(pyg_nn.MessagePassing):
             nn.Tanh(),
             MyLinear(self.emb_dim , self.emb_dim)
         )
-        self.de_ln = MyLinear(1, self.emb_dim)
+        self.dem_ln = MyLinear(1, self.emb_dim)
         
 
         self.cell_gate = nn.Sequential(
