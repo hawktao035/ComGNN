@@ -81,6 +81,17 @@ def load_data(train_file, valid_file, offset, time_steps):
     return train_dataset, val_dataset
 
 
+def load_test_data(test_file, offset, time_steps):
+    print('Loading testing set...')
+    test_data = npz_load_batch(f'./data/{test_file}', offset=offset)
+    test_data = get_data(test_data, T=time_steps, training=True)
+
+    print('Testing dataset...')
+    test_dataset = MyDataset(test_data)
+
+    return test_dataset
+
+
 class MyDataset(Dataset):
 
     def __init__(self, data):
@@ -176,7 +187,7 @@ class MyDataLoader(DataLoader):
 class CustomGraph(Data):
     def __init__(self, cell_d, cell_s, edge_index, seq, bin, num_nodes, scale):
         super().__init__() 
-        self.cell_d = cell_d 
+        self.cell_d = cell_d
         self.cell_s = cell_s 
         self.edge_index = edge_index 
         self.bin = bin
@@ -186,4 +197,4 @@ class CustomGraph(Data):
         
     def sanity_check(self):
         assert self.cell_d.shape[0] ==  self.cell_s.shape[0]
-        assert self.edge_index[0].max() <= self.cell_d.shape[0] 
+        assert self.edge_index[0].max() <= self.cell_d.shape[0]

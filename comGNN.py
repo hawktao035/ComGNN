@@ -36,11 +36,13 @@ class ComGNN(nn.Module):
         req_qt = None 
         for i in range(1, seq_len + 1):
             wd_h, req_qt = self.processor(wd_h, r_h, cell_s, edge_index, req_qt)
+            # TODO: mSWE
             out_wd.append((wd_h).squeeze(-1))
 
             if torch.any(valid_seq_ind[:, i-1]):
                 wd_losses += self.compute_loss(cell_wd[:, i], wd_h)
                 non_zero_loss += F.relu(-wd_h).mean()
+                # TODO: physical law constraint
             r_h = rains[:, i]
         
         out_wd = torch.stack(out_wd, dim=1)
@@ -91,7 +93,7 @@ class FlowGNNLayerGCN2(nn.Module):
         self.cell_msg = self.cell_in_dim * 1
         self.emb_dim = emb_dim 
         
-        self.n_convs = 2
+        self.n_convs = 2 # TODO:n_convs influence?
         self.gcn_list = nn.ModuleList(ConservationBlock(self.emb_dim) for _ in range(self.n_convs))
     
     def forward(self, wd, cell_s, rain_emb, edge_index, req_qt):
@@ -101,7 +103,7 @@ class FlowGNNLayerGCN2(nn.Module):
         temp_f = cell_elev * wd  
 
         cell_in = rain_emb 
-        cell_out = cell_in 
+        cell_out = cell_in
         if req_qt is None: req_qt = torch.zeros_like(cell_in)
         dev_qt = req_qt
         for i in range(self.n_convs):
@@ -159,7 +161,7 @@ class ComputeDevQt(pyg_nn.MessagePassing):
             nn.Tanh(),
             MyLinear(self.emb_dim , self.emb_dim)
         )
-        self.dem_ln = MyLinear(1, self.emb_dim)
+        self.de_ln = MyLinear(1, self.emb_dim)
         
 
         self.cell_gate = nn.Sequential(

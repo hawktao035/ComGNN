@@ -8,6 +8,7 @@ from tqdm import tqdm
 import torch
 import numpy as np
 from torch import optim, nn
+import torch
 
 from dataset import MyDataset, MyDataLoader, load_data
 import custom_metrics as c_metrics
@@ -88,10 +89,20 @@ def print_metrics(loss_wd, mse, nse, p_r2, loss_nz):
 
 
 def train(train_data_loader, val_data_loader):
-    
+
     index = [19]
+
+    # Best model setup
+    if not hasattr(train, "best_val"):
+        train.best_val = float('inf')
+    ckpt_dir = "checkpoints"
+
+    os.makedirs(ckpt_dir, exist_ok=True)
+    best_path = os.path.join(ckpt_dir, f"{args.model_name}_{args.time_stamp}_best.pt")
+    last_path = os.path.join(ckpt_dir, f"{args.model_name}_{args.time_stamp}_last.pt")
+
     for epoch_i in range(1, args.n_epochs+1):
-        
+
         start = time.time()
         model.train()
         ## Training
@@ -100,9 +111,45 @@ def train(train_data_loader, val_data_loader):
         with torch.no_grad():
             if val_data_loader:
                 val_loss , val_mse, val_nse,  val_p_r2, val_loss_nz = run_batch(model, optimizer, val_data_loader, epoch_i, 'val', args.device)
-        
+
+        # TODO: early stopping
+
+        if val_data_loader:
+            # Save best model
+            if val_loss < train.best_val:
+                train.best_val = val_loss
+                torch.save({
+                    "state_dict": model.state_dict(),
+                    "optimizer": optimizer.state_dict(),
+                    "args": vars(args),
+                    "epoch": epoch_i,
+                    "best_val": float(train.best_val),
+                    "saved_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+                }, best_path)
+                print(f"✓ Saved BEST checkpoint to {best_path} (val_loss={train.best_val:.4f})")
+
+            # Save latest model
+            torch.save({
+                "state_dict": model.state_dict(),
+                "optimizer": optimizer.state_dict(),
+                "args": vars(args),
+                "epoch": epoch_i,
+                "best_val": float(train.best_val),
+                "saved_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+            }, last_path)
+        else:
+            # Save latest model
+            torch.save({
+                "state_dict": model.state_dict(),
+                "optimizer": optimizer.state_dict(),
+                "args": vars(args),
+                "epoch": epoch_i,
+                "best_val": float(train.best_val),
+                "saved_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+            }, last_path)
+
         model.train()
-        
+
         if train_data_loader:
             print(f'\n#### Epoch {epoch_i} time {time.time() - start:.4f}s')
             print_metrics(train_loss, train_mse[index], train_nse[index], train_p_r2[index], train_loss_nz)
@@ -127,14 +174,15 @@ if __name__ == '__main__':
     parser.add_argument('--n_conv_layers', type=int, default=2)
     parser.add_argument('--valid_data', type=str, default='sims_harvey.npz')
     parser.add_argument('--train_data', type=str, default='whiteoak_harvey.npz')
+    # TODO: Multi training sets
 
     args = parser.parse_args()
 
     args.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     args.time_stamp = f'{datetime.now()}'.replace(':', '_')
     
-    train_dataset, val_dataset = load_data(args.train_data, args.valid_data, args.offset, args.time_steps)
-    train_loader = MyDataLoader(train_dataset,  shuffle=True) 
+    train_dataset, val_dataset = load_data(args.train_data, args.valid_data, args.offset, args.time_steps) # TODO: D8 → MDF？
+    train_loader = MyDataLoader(train_dataset,  shuffle=True)
     valid_loader = MyDataLoader(val_dataset) 
     sample = train_dataset[0]
     
@@ -151,3 +199,5 @@ if __name__ == '__main__':
     print(args)
     print(f'Train on {len(train_dataset)}, Validating on {len(val_dataset)}')
     train(train_loader, valid_loader)
+
+    # TODO: test
