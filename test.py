@@ -126,9 +126,9 @@ def main():
         "metrics": {
             "loss": float(test_loss),
             "loss_nonzero": float(test_loss_nz),
-            "mse": float(test_mse),
-            "nse": float(test_nse),
-            "pearson_r2": float(test_p_r2),
+            "mse": test_mse.tolist(),
+            "nse": test_nse.tolist(),
+            "pearson_r2": test_p_r2.tolist(),
         },
     }
     out_path = os.path.join(args.out_dir, f"metrics_{stamp}.json")
@@ -143,9 +143,9 @@ def main():
     print("Metrics        :")
     print(f"  Loss         = {meta['metrics']['loss']:.6f}")
     print(f"  Loss (nonzero)= {meta['metrics']['loss_nonzero']:.6f}")
-    print(f"  MSE          = {meta['metrics']['mse']:.6f}")
-    print(f"  NSE          = {meta['metrics']['nse']:.6f}")
-    print(f"  Pearson R^2  = {meta['metrics']['pearson_r2']:.6f}")
+    print(f"  MSE (mean)   = {np.mean(test_mse):.6f}")
+    print(f"  NSE (mean)   = {np.mean(test_nse):.6f}")
+    print(f"  Pearson R^2 (mean)= {np.mean(test_p_r2):.6f}")
     print(f"Saved metrics  : {out_path}")
 
 

@@ -12,8 +12,8 @@ def MSE_score(targets, preds, mask):
     
     for i in range(len(targets)):
         m = mask[i]
-        if np.all(~m):
-            break
+        #if np.all(~m):
+        #    break
         t = targets[i][m]
         p = preds[i][m]
         if t.size == 0:
