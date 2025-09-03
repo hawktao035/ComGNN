@@ -51,6 +51,9 @@ See details about the data format (including conversion between grid and graph r
    2. git clone https://github.com/hawktao035/ComGNN.git
    3. cd ComGNN
    4. mkdir -p checkpoints logs results_test
+   5. Update (If needed): \
+   git fetch origin \
+   git pull origin main
 3. Create the environment and notebook:
    1. python -m pip install --upgrade pip
    2. pip install jupyter papermill nbconvert   # 可选
