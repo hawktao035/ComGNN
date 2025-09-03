@@ -53,13 +53,14 @@ def main():
     parser.add_argument("--offset", type=int, default=10, help="Temporal offset when slicing sequences")
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--num_workers", type=int, default=0)
-    # Device & checkpoint
-    parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
+    # Checkpoint
     parser.add_argument("--checkpoint", type=str, default="", help="Path to .pt file or a directory with checkpoints")
     # Output
     parser.add_argument("--out_dir", type=str, default="results_test", help="Where to save metrics JSON")
 
     args = parser.parse_args()
+
+    args.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
     # Resolve checkpoint
     ckpt_path = find_checkpoint(args.checkpoint)

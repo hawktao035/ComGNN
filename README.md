@@ -42,3 +42,22 @@ See details about the data format (including conversion between grid and graph r
         year={2024}
     }
 
+
+## Getting started with Thunder Compute
+
+1. Basic action for Thunder Computer with API through CLI: tnr create, tnr start ***, tnr connect ***, tnr stop ***, exit.
+2. Clone from Github:
+   1. cd ~
+   2. git clone https://github.com/hawktao035/ComGNN.git
+   3. cd ComGNN
+   4. mkdir -p checkpoints logs results_test
+3. Create the environment and notebook:
+   1. python -m pip install --upgrade pip
+   2. pip install jupyter papermill nbconvert   # 可选
+   3. pip install -r requirement.txt
+4. Run ComGNN:
+   1. Train & Validation: \
+   python train.py 2>&1 | tee -a logs/train.log 
+   2. Test: \
+   python test.py --device cuda 2>&1 | tee -a logs/test.log
+5. tnr scp 0:/home/ubuntu/ComGNN/results_test ./ComGNN_results
