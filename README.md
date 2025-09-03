@@ -59,5 +59,5 @@ See details about the data format (including conversion between grid and graph r
    1. Train & Validation: \
    python train.py 2>&1 | tee -a logs/train.log 
    2. Test: \
-   python test.py --device cuda 2>&1 | tee -a logs/test.log
+   python test.py 2>&1 | tee -a logs/test.log
 5. tnr scp 0:/home/ubuntu/ComGNN/results_test ./ComGNN_results
