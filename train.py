@@ -166,7 +166,7 @@ if __name__ == '__main__':
     parser.add_argument('--drop', type=float, default=0.3, help='Dropout probability.')
     parser.add_argument('--batch_size', type=int, default=20)
     parser.add_argument('--weight_decay', type=float, default=5e-4)
-    parser.add_argument('--n_epochs', type=int, default=1000)
+    parser.add_argument('--n_epochs', type=int, default=20)
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--n_layers', type=int, default=None)
     parser.add_argument('--emb_dim', type=int, default=32)
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     train_loader = MyDataLoader(train_dataset,  shuffle=True)
     valid_loader = MyDataLoader(val_dataset) 
     sample = train_dataset[0]
-    
+
     model = comGNN.ComGNN(args)
     args.model_name = model.__class__.__name__
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)

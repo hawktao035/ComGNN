@@ -135,6 +135,8 @@ def main():
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(meta, fh, indent=2)
 
+    index = 19
+
     print("\n==== Test Summary ====")
     print(f"Checkpoint     : {ckpt_path}")
     print(f"Saved epoch    : {meta['saved_epoch']} (best_val={meta['best_val']:.6f})")
@@ -144,10 +146,12 @@ def main():
     print(f"  Loss         = {meta['metrics']['loss']:.6f}")
     print(f"  Loss (nonzero)= {meta['metrics']['loss_nonzero']:.6f}")
     print(f"  MSE (mean)   = {np.mean(test_mse):.6f}")
+    print(f"  MSE ({index})   = {test_mse[index]:.6f}")
     print(f"  NSE (mean)   = {np.mean(test_nse):.6f}")
+    print(f"  NSE ({index})   = {test_nse[index]:.6f}")
     print(f"  Pearson R^2 (mean)= {np.mean(test_p_r2):.6f}")
+    print(f"  Pearson R^2 ({index})   = {test_p_r2[index]:.6f}")
     print(f"Saved metrics  : {out_path}")
-
 
 if __name__ == "__main__":
     main()

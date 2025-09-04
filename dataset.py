@@ -5,9 +5,9 @@ import pandas as pd
 from torch.utils.data import Dataset, DataLoader 
 from torch_geometric.data import Data, Batch
 from tqdm import tqdm 
-import copy 
+import copy
 from sklearn import preprocessing
-import json 
+import json
 
 
 def get_data(data_list, T, training=False):
@@ -110,7 +110,7 @@ class MyDataset(Dataset):
         
         for d in tqdm(data, desc='Building data'):
             cell_dyn = d['cell_dyn']
-            cell_s = d['static'] 
+            cell_s = d['static']
             temp_seq = np.full((cell_dyn.shape[0], d['seq'].shape[0]), fill_value=False) 
             temp_seq[:,] = d['seq']
             cell_dyn[...,1] = cell_s[...,0][...,None] + cell_dyn[...,0]
